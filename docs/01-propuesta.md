@@ -2,7 +2,7 @@
 
 > Estado: **borrador v0.1 — pendiente de aprobación**. No se escribe código hasta aprobar este documento.
 
-Nombre de trabajo: **Señala** (se puede cambiar). Plataforma web donde los estudiantes de la facultad reportan incidencias y un administrador las gestiona hasta resolverlas.
+Nombre: **Señala**. Plataforma web donde los estudiantes de la facultad reportan incidencias y un administrador las gestiona hasta resolverlas.
 
 Inspiración: **Zendesk** (bandeja de tickets, estados, seguimiento) + **Stack Overflow** (hilos públicos, votos, respuesta destacada).
 
@@ -124,14 +124,20 @@ Infraestructura · Equipos y laboratorios · Red y servicios TI · Limpieza y se
 - **Privacidad**: prueba documentada de que una consulta directa a la API no devuelve el correo de un autor anónimo.
 - **Seguimiento**: el autor ve el cambio de estado inmediatamente después de que el admin lo hace.
 
-## 10. Preguntas abiertas
+## 10. Decisiones tomadas
+
+| Tema | Decisión |
+|---|---|
+| Backend | Supabase (Postgres + Auth + Storage). |
+| Ingreso | Cualquier correo, verificado con enlace mágico. Restringir al dominio institucional queda como P1. |
+| Aviso por correo al cambiar estado | P1. En la v1 el seguimiento se hace en "Mis incidencias". |
+| Nombre | **Señala**. |
+
+### Preguntas abiertas
 
 | Pregunta | Quién decide | ¿Bloquea? |
 |---|---|---|
-| ¿Restringimos el ingreso a correos institucionales (p. ej. `@pucp.edu.pe`)? Facilita la confianza, pero complica la demo con correos personales. | Equipo | No |
-| ¿El correo de cambio de estado (P1) es necesario para la nota, o basta con verlo en "Mis incidencias"? | Equipo / docente | No |
-| ¿Quién es el administrador en la demo? (un integrante del grupo) | Equipo | No |
-| Nombre final del producto. | Equipo | No |
+| ¿Qué integrante hace de administrador en la demo? | Equipo | No |
 
 ## 11. Entregables del laboratorio
 
