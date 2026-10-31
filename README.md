@@ -2,6 +2,8 @@
 
 Proyecto del **Laboratorio 5: producto informático**.
 
+**App publicada:** https://senala-incidencias.vercel.app/
+
 Los estudiantes reportan incidencias de la facultad con fotos o video, de forma pública o privada y con opción de anonimato. Un administrador las gestiona hasta resolverlas. Inspirado en Zendesk (bandeja y estados) y Stack Overflow (hilos, votos y respuesta destacada).
 
 ## Qué hace
@@ -49,7 +51,7 @@ insert into correos_admin values ('correo@ejemplo.com');
 | Estudiante | `diego.quispe@senala.test` |
 | Estudiante | `valeria.soto@senala.test` |
 
-El equipo tiene la contraseña de estas cuentas.
+Todas usan la contraseña `Senala-demo-2026`.
 
 ## Documentos
 
