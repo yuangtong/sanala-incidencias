@@ -1,22 +1,33 @@
 # Declaración de uso de IA
 
-> Borrador para que el equipo lo complete y revise. Debe reflejar con honestidad cómo se trabajó.
+**Autor del proyecto:** Yuang Tong (integrante único)
+**Herramienta de IA usada:** Claude (Anthropic), a través de Claude Code.
 
-**Herramienta usada:** Claude (Anthropic), mediante Claude Code.
+La IA se usó como **herramienta de desarrollo**. La idea, el problema a resolver, los requisitos, las directrices, el diseño y la estructura del producto son míos, y también las decisiones importantes.
 
-## Para qué se usó
+## Qué hice yo
 
-| Parte del proyecto | Qué hizo la IA | Qué hizo el equipo |
-|---|---|---|
-| Idea y requisitos | Ordenó la propuesta del equipo en un documento de requisitos (problema, usuarios, prioridades). | Definió el problema, los requisitos y tomó las decisiones: backend, tipo de ingreso, nombre. |
-| Diseño y arquitectura | Propuso la arquitectura (React + Supabase + Vercel), el modelo de datos y los bocetos de pantallas. | Revisó y aprobó el diseño. |
-| Código | Generó el esquema SQL con las reglas de privacidad y la app en React. | [Completar: qué revisaron, probaron o modificaron] |
-| Presentación y guion | Generó la presentación y el borrador del guion. | [Completar: qué ajustaron] |
+- Identifiqué el problema: los estudiantes no tienen un canal claro para reportar incidencias de la facultad ni para darles seguimiento.
+- Definí la propuesta y los requisitos:
+  - los campos necesarios del reporte;
+  - la opción de anonimato;
+  - el correo obligatorio para seguimiento, oculto al público pero visible para el administrador;
+  - incidencias públicas o privadas, con comentarios estilo Reddit, Stack Overflow o X en las públicas;
+  - adjuntos de evidencia audiovisual.
+- Elegí las referencias de inspiración (Zendesk y Stack Overflow) y la arquitectura base: una app React con Vite desplegada en Vercel.
+- Establecí el método de trabajo: primero diseñar, y desarrollar solo después de mi aprobación.
+- Tomé las decisiones de diseño: Supabase como backend, ingreso con cualquier correo, aviso por correo como mejora opcional y el nombre "Señala".
+- Revisé y aprobé el diseño, y pedí ajustes a la presentación (por ejemplo, explicar sin tecnicismos cómo funciona).
 
-## Cómo verificamos el resultado
+## Para qué usé la IA
 
-- [Completar: pruebas hechas por el equipo, por ejemplo reportar como anónimo y comprobar con otra cuenta que no se ve el autor]
+- Ordenar mi propuesta en documentos de requisitos, arquitectura y diseño.
+- Escribir el código de la aplicación y de la base de datos a partir de mis indicaciones.
+- Configurar la base de datos y el despliegue con mis cuentas.
+- Armar la presentación y el guion a partir del producto.
 
-## Lo que podemos explicar y defender
+## Cómo verifiqué el resultado
 
-- [Completar por integrante]
+- Revisé cada documento antes de aprobar el paso siguiente.
+- Probé la aplicación con las cuentas de prueba: estudiante y administrador.
+- Puedo explicar y defender cómo funciona cada parte: el reporte, el anonimato, la visibilidad pública o privada, la evidencia y la gestión del administrador.
