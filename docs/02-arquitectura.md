@@ -1,6 +1,6 @@
 # 02 · Arquitectura
 
-> Estado: **borrador v0.1 — pendiente de aprobación**.
+> Estado: **v1.0 — aprobado e implementado**.
 
 ## 1. Visión general
 
@@ -10,7 +10,7 @@ Arquitectura sencilla de dos piezas: una **SPA en React** desplegada en Vercel y
 ┌─────────────────────────────┐         ┌──────────────────────────────────────┐
 │  Navegador                  │         │  Supabase (plan gratuito)            │
 │  React + Vite (SPA)         │  HTTPS  │                                      │
-│  servida por Vercel         │ ──────▶ │  Auth      enlace mágico por correo  │
+│  servida por Vercel         │ ──────▶ │  Auth      correo + contraseña       │
 │                             │         │  Postgres  tablas + RLS + vistas     │
 │  supabase-js (clave anon)   │ ◀────── │  Storage   bucket privado evidencias │
 └─────────────────────────────┘         └──────────────────────────────────────┘
@@ -19,7 +19,8 @@ Arquitectura sencilla de dos piezas: una **SPA en React** desplegada en Vercel y
 **Por qué Supabase y no un backend propio**
 
 - El requisito clave (anonimato real, privado vs. público) se resuelve con **Row Level Security** en Postgres: la regla vive en la base de datos, así que aunque alguien llame a la API directamente no puede ver lo que no le corresponde.
-- Trae autenticación por correo y almacenamiento de archivos listos.
+- Trae autenticación por correo (con verificación) y almacenamiento de archivos listos.
+- Se usa correo + contraseña en lugar de enlace mágico: el servidor de correo gratuito de Supabase envía pocos correos por hora, y con contraseña solo se envía uno al registrarse.
 - El frontend sigue siendo una app estática: despliegue en Vercel sin configuración especial.
 - Es fácil de explicar y defender en la exposición: "la seguridad está en la base de datos, no en el botón".
 
@@ -81,12 +82,14 @@ Restricciones en la base de datos (no solo en el formulario):
 
 Cómo se garantiza:
 
-1. La tabla `incidencias` **no se lee directamente** desde el cliente. Se lee a través de una vista `incidencias_publicas` que devuelve `autor_nombre = NULL` y omite `autor_id` cuando `anonimo = true` y quien consulta no es el autor ni el admin. Lo mismo para `comentarios_publicos`.
+1. Las tablas **no se leen directamente** desde el cliente (se revocó `SELECT`). Se leen a través de las vistas `v_incidencias`, `v_comentarios`, `v_adjuntos` y `v_historial`, que aplican el filtro de visibilidad y devuelven `autor_nombre = NULL` cuando la incidencia o comentario es anónimo y quien consulta no es el autor ni el admin. `autor_email` solo se llena para el admin.
 2. La tabla `perfiles` (donde está el correo) solo la puede leer el propio usuario y el admin.
 3. Políticas RLS:
    - `select` en incidencias: `visibilidad = 'publica' OR autor_id = auth.uid() OR es_admin()`.
    - `insert`: cualquier usuario autenticado, con `autor_id = auth.uid()` forzado.
-   - `update` de estado: solo `es_admin()`.
+   - cambio de estado: solo con la función `cambiar_estado()`, que verifica `es_admin()` y escribe el historial.
+   - comentarios: en públicas cualquiera con sesión; en privadas solo autor y admin (conversación privada). Solo el admin puede marcar `es_oficial`.
+   - votos: solo en incidencias públicas, uno por persona.
 4. Storage: bucket `evidencias` **privado**. Los archivos se sirven con URL firmada de corta duración, y la política de lectura replica la regla de visibilidad de la incidencia.
 5. Prueba que mostraremos en el video: llamar a la API con la clave pública y verificar que una incidencia anónima no trae ni nombre ni correo.
 
@@ -95,12 +98,11 @@ Cómo se garantiza:
 | Ruta | Acceso | Pantalla |
 |---|---|---|
 | `/` | Todos | Feed de incidencias públicas (estilo Stack Overflow) |
-| `/i/:numero` | Según visibilidad | Detalle de la incidencia + hilo de comentarios |
-| `/ingresar` | Todos | Ingreso con enlace mágico |
+| `/i/:numero` | Según visibilidad | Detalle + hilo. El admin ve además un panel con autor, correo y cambio de estado |
+| `/ingresar` | Todos | Ingresar o crear cuenta (correo + contraseña) |
 | `/reportar` | Estudiante | Formulario de nueva incidencia |
 | `/mis-incidencias` | Estudiante | Mis casos y su estado |
 | `/admin` | Admin | Bandeja de incidencias (estilo Zendesk) |
-| `/admin/i/:numero` | Admin | Vista de gestión: datos del autor, estado, respuesta oficial |
 
 ## 6. Estructura del proyecto
 
@@ -108,15 +110,14 @@ Cómo se garantiza:
 portal-incidencias/
 ├── docs/                    ← propuesta, arquitectura, diseño, declaración de IA
 ├── supabase/
-│   ├── schema.sql           ← tablas, enums, vistas
-│   ├── policies.sql         ← RLS y storage
-│   └── seed.sql             ← datos de ejemplo para la demo
+│   └── migrations/0001_esquema.sql  ← tablas, vistas, RLS, funciones y storage
 ├── src/
 │   ├── lib/supabase.js      ← cliente
-│   ├── auth/                ← contexto de sesión, guardas de ruta
-│   ├── pages/               ← una carpeta por ruta
-│   ├── components/          ← TarjetaIncidencia, BadgeEstado, SubidaEvidencia, Hilo…
-│   └── styles/              ← tokens.css, base.css
+│   ├── lib/constantes.js    ← categorías, estados, límites, formato de fechas
+│   ├── auth/                ← sesión y guardas de ruta
+│   ├── pages/               ← Feed, Detalle, Reportar, MisIncidencias, Bandeja, Ingresar
+│   ├── components/          ← Cabecera, FilaIncidencia, Estado, Iconos
+│   └── styles/app.css       ← tokens y estilos
 ├── .env.example             ← VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
 ├── vercel.json              ← reescritura de rutas a index.html (SPA)
 └── README.md
@@ -124,9 +125,9 @@ portal-incidencias/
 
 ## 7. Despliegue
 
-1. Crear proyecto en Supabase, ejecutar `schema.sql`, `policies.sql` y `seed.sql`.
-2. En Supabase Auth, añadir la URL de Vercel como URL de redirección del enlace mágico.
-3. Marcar el perfil de un integrante como `admin` (una línea de SQL).
+1. Crear proyecto en Supabase y ejecutar `supabase/migrations/0001_esquema.sql`.
+2. En Supabase › Authentication › URL Configuration, poner la URL de Vercel como *Site URL* (para el enlace de confirmación de correo).
+3. Para dar rol admin: `insert into correos_admin values ('correo@ejemplo.com');` antes de que esa persona se registre, o `update perfiles set rol = 'admin' where email = '…';` si ya existe.
 4. Conectar el repo de GitHub a Vercel, cargar las dos variables `VITE_…` y desplegar.
 5. `vercel.json` reescribe todas las rutas a `index.html` para que funcione React Router.
 
@@ -134,6 +135,6 @@ portal-incidencias/
 
 | Riesgo | Mitigación |
 |---|---|
-| El correo del enlace mágico tarda o cae en spam en la demo | Dejar sesiones iniciadas antes de grabar; Supabase permite configurar SMTP propio si hiciera falta. |
+| El servidor de correo gratuito de Supabase limita los envíos por hora | Para la demo usar las cuentas ya creadas; para uso real, configurar SMTP propio o desactivar la confirmación de correo. |
 | Límite del plan gratuito (50 MB por archivo, 1 GB de storage) | Límite de 50 MB por video y 3 archivos por incidencia. |
 | Contenido ofensivo en comentarios | P1: el admin oculta comentarios. Los comentarios anónimos siguen ligados a un correo verificado, lo que desalienta el abuso. |

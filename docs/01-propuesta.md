@@ -1,6 +1,6 @@
 # 01 · Propuesta del producto (PRD)
 
-> Estado: **borrador v0.1 — pendiente de aprobación**. No se escribe código hasta aprobar este documento.
+> Estado: **v1.0 — aprobado e implementado**.
 
 Nombre: **Señala**. Plataforma web donde los estudiantes de la facultad reportan incidencias y un administrador las gestiona hasta resolverlas.
 
@@ -65,7 +65,7 @@ Hoy un estudiante que encuentra un proyector roto, un laboratorio sin internet o
 
 **Casos límite**
 - El archivo supera el tamaño permitido o tiene un formato no aceptado: mensaje claro antes de subir.
-- El estudiante intenta comentar en una incidencia privada: la opción no existe.
+- Un estudiante intenta ver o comentar la incidencia privada de otro: recibe "no existe o no tienes acceso".
 - El admin cambia una incidencia a privada (por ejemplo, contiene datos sensibles): desaparece del feed y los comentarios quedan ocultos.
 - No hay incidencias que coincidan con un filtro: estado vacío con acceso directo a "Reportar".
 
@@ -75,10 +75,10 @@ Hoy un estudiante que encuentra un proyector roto, un laboratorio sin internet o
 
 | # | Requisito | Criterio de aceptación |
 |---|---|---|
-| R1 | **Ingreso con correo** (enlace mágico, sin contraseña) | Dado un correo válido, cuando el estudiante pide el enlace, recibe un correo y al abrirlo queda dentro. Sin sesión no se puede reportar, votar ni comentar; sí se puede leer el feed público. |
+| R1 | **Ingreso con correo** (correo + contraseña, correo verificado al registrarse) | Dado un correo válido, el estudiante crea su cuenta, confirma el correo y entra. Sin sesión no se puede reportar, votar ni comentar; sí se puede leer el feed público. |
 | R2 | **Formulario de incidencia** | Campos: título (10–120 caracteres), descripción (mín. 30), categoría (lista fija), ubicación (pabellón + aula/ambiente), fecha en que ocurrió, visibilidad (pública/privada), anónimo (sí/no). Validación en el formulario y en la base de datos. |
 | R3 | **Anonimato** | Si es anónima, en el feed, el detalle y los comentarios se muestra "Estudiante anónimo". La API pública **no devuelve** el correo ni el id del autor. El admin ve nombre y correo. |
-| R4 | **Visibilidad pública/privada** | Privada: solo la ven el autor y el admin; no admite comentarios ni votos. Pública: aparece en el feed y admite comentarios y votos. |
+| R4 | **Visibilidad pública/privada** | Privada: solo la ven el autor y el admin; no admite votos y su hilo es una conversación privada autor–admin. Pública: aparece en el feed y admite comentarios y votos. |
 | R5 | **Evidencia audiovisual** | Hasta 3 archivos por incidencia. Imágenes JPG/PNG/WEBP ≤ 10 MB; video MP4/WEBM ≤ 50 MB. Vista previa antes de enviar. Los archivos de incidencias privadas solo se sirven al autor y al admin (enlaces firmados). |
 | R6 | **Feed público** estilo Stack Overflow | Lista con votos, número de comentarios, estado, categoría y antigüedad. Orden: recientes / más votadas / sin resolver. Búsqueda por texto y filtro por categoría y estado. |
 | R7 | **Hilo de comentarios** | Comentarios en orden cronológico, con opción de anonimato. La respuesta oficial del admin aparece fijada arriba y resaltada. |
@@ -90,7 +90,7 @@ Hoy un estudiante que encuentra un proyector roto, un laboratorio sin internet o
 ### P1 — si da el tiempo
 
 - Correo automático al autor cuando cambia el estado de su incidencia.
-- Admin oculta comentarios inapropiados; estudiante puede reportar un comentario.
+- Admin oculta comentarios inapropiados (implementado); estudiante puede reportar un comentario.
 - Admin marca una incidencia como duplicada y enlaza la original.
 - Notas internas del admin (no visibles al estudiante).
 - Prioridad (baja / media / alta / urgente) asignada por el admin.
@@ -129,7 +129,7 @@ Infraestructura · Equipos y laboratorios · Red y servicios TI · Limpieza y se
 | Tema | Decisión |
 |---|---|
 | Backend | Supabase (Postgres + Auth + Storage). |
-| Ingreso | Cualquier correo, verificado con enlace mágico. Restringir al dominio institucional queda como P1. |
+| Ingreso | Cualquier correo, con contraseña y verificación por correo. Restringir al dominio institucional queda como P1. |
 | Aviso por correo al cambiar estado | P1. En la v1 el seguimiento se hace en "Mis incidencias". |
 | Nombre | **Señala**. |
 

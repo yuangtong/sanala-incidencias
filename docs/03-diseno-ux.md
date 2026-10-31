@@ -1,6 +1,6 @@
 # 03 · Diseño y experiencia de usuario
 
-> Estado: **borrador v0.1 — pendiente de aprobación**.
+> Estado: **v1.0 — aprobado e implementado**.
 
 ## 1. Pautas de diseño
 
@@ -91,4 +91,4 @@ Lista con código, título, estado, visibilidad (candado si es privada), última
 | Archivo demasiado grande | "El video pesa 63 MB. El máximo es 50 MB." (junto al archivo) |
 | Formato no permitido | "Solo se aceptan JPG, PNG, WEBP, MP4 o WEBM." |
 | Incidencia privada de otro | "Esta incidencia no existe o no tienes acceso." (no revela si existe) |
-| Sin sesión al votar/comentar | Invitación a ingresar con el correo, y vuelta a la misma página |
+| Sin sesión al votar/comentar | Invitación a ingresar, y vuelta a la misma página |
