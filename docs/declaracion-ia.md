@@ -1,33 +1,43 @@
 # Declaración de uso de IA
 
-**Autor del proyecto:** Yuang Tong (integrante único)
-**Herramienta de IA usada:** Claude (Anthropic), a través de Claude Code.
+**Autor:** Yuang Tong (integrante único)
+**Herramienta:** Claude (Anthropic), a través de Claude Code.
 
-La IA se usó como **herramienta de desarrollo**. La idea, el problema a resolver, los requisitos, las directrices, el diseño y la estructura del producto son míos, y también las decisiones importantes.
+Usé la IA como herramienta de desarrollo. Yo dirigí el trabajo como instructor: definí la idea, el diseño, las herramientas y los pasos. La IA me ayudó a armar el plan y a ejecutarlo bajo mis órdenes.
 
-## Qué hice yo
+## Origen de la idea
 
-- Identifiqué el problema: los estudiantes no tienen un canal claro para reportar incidencias de la facultad ni para darles seguimiento.
-- Definí la propuesta y los requisitos:
-  - los campos necesarios del reporte;
-  - la opción de anonimato;
-  - el correo obligatorio para seguimiento, oculto al público pero visible para el administrador;
-  - incidencias públicas o privadas, con comentarios estilo Reddit, Stack Overflow o X en las públicas;
-  - adjuntos de evidencia audiovisual.
-- Elegí las referencias de inspiración (Zendesk y Stack Overflow) y la arquitectura base: una app React con Vite desplegada en Vercel.
-- Establecí el método de trabajo: primero diseñar, y desarrollar solo después de mi aprobación.
-- Tomé las decisiones de diseño: Supabase como backend, ingreso con cualquier correo, aviso por correo como mejora opcional y el nombre "Señala".
-- Revisé y aprobé el diseño, y pedí ajustes a la presentación (por ejemplo, explicar sin tecnicismos cómo funciona).
+La necesidad salió de tres fuentes:
 
-## Para qué usé la IA
+- las problemáticas discutidas en el curso;
+- la lluvia de ideas grupal de la actividad en clase;
+- la indicación de la profesora de desarrollar un producto "vivo", que funcione y que otra persona pueda usar.
 
-- Ordenar mi propuesta en documentos de requisitos, arquitectura y diseño.
-- Escribir el código de la aplicación y de la base de datos a partir de mis indicaciones.
-- Configurar la base de datos y el despliegue con mis cuentas.
-- Armar la presentación y el guion a partir del producto.
+## Lo que definí e indiqué yo
+
+1. **La idea y la necesidad.**
+2. **Los requisitos:**
+   - campos del reporte;
+   - anonimato;
+   - correo obligatorio, oculto al público y visible al administrador;
+   - incidencias públicas o privadas, con comentarios en las públicas;
+   - evidencia audiovisual.
+3. **Las referencias:** Zendesk y Stack Overflow.
+4. **La arquitectura y las herramientas:** React con Vite, despliegue en Vercel, GitHub y Supabase. Conecté yo mismo esas herramientas y creé el repositorio.
+5. **El método:** primero el diseño; el desarrollo solo con mi aprobación; después la presentación y el guion.
+6. **Las decisiones:** Supabase, ingreso con cualquier correo, aviso por correo como mejora opcional y el nombre "Señala".
+7. **Las pautas de la presentación:** Claude Slides con una skill de diseño, sin diseño genérico ni emojis, y sin tecnicismos.
+8. **La revisión y aprobación** de cada entrega.
+
+## En qué me ayudó la IA
+
+- **Plan:** ordenó mi propuesta en documentos y me planteó alternativas para que yo decidiera.
+- **Código:** escribió el código de la app y de la base de datos.
+- **Configuración:** configuró Supabase, el repositorio y el despliegue con mis cuentas.
+- **Documentos y presentación:** redactó la documentación y armó la presentación.
 
 ## Cómo verifiqué el resultado
 
-- Revisé cada documento antes de aprobar el paso siguiente.
-- Probé la aplicación con las cuentas de prueba: estudiante y administrador.
-- Puedo explicar y defender cómo funciona cada parte: el reporte, el anonimato, la visibilidad pública o privada, la evidencia y la gestión del administrador.
+- Revisé el diseño antes de autorizar el desarrollo.
+- [Completar: pruebas hechas con las cuentas de prueba.]
+- Puedo explicar y defender cada parte del producto.
